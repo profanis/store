@@ -1,6 +1,8 @@
+import { Type, ɵivyEnabled } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { Store } from '../../store';
+import { NgxsConfig } from '../../symbols';
 import { propGetter } from '../../internal/internals';
 import { SelectFactory } from './select-factory';
 import { StateToken } from '../../state-token/state-token';
@@ -13,28 +15,30 @@ export function createSelectObservable<T = any>(
   selector: any,
   store: Store | null
 ): Observable<T> {
-  // Caretaker note: we have still left the `typeof` condition in order to avoid
-  // creating a breaking change for projects that still use the View Engine.
-  if (typeof ngDevMode === 'undefined' || ngDevMode) {
-    if (!SelectFactory.store && !store) {
-      throwSelectFactoryNotConnectedError();
-    }
-  }
-
-  return (store || SelectFactory.store)!.select(selector);
+  // We're doing this stuff to tree-shake the `SelectFactory` when the user
+  // is running Ivy since NGXS will select the state from the provided `store` argument.
+  return ɵivyEnabled
+    ? createSelectObservableIvy(selector, store)
+    : createSelectObservableViewEngine(selector);
 }
 
-export function createSelectorFn(name: string, rawSelector?: any, paths: string[] = []): any {
+export function createSelectorFn(
+  config: NgxsConfig | null,
+  name: string,
+  rawSelector?: any,
+  paths: string[] = []
+): SelectorFn {
   rawSelector = !rawSelector ? removeDollarAtTheEnd(name) : rawSelector;
 
-  if (typeof rawSelector === 'string') {
-    const propsArray: string[] = paths.length
-      ? [rawSelector, ...paths]
-      : rawSelector.split('.');
-    return propGetter(propsArray, SelectFactory.config!);
+  if (typeof rawSelector !== 'string') {
+    return rawSelector;
   }
 
-  return rawSelector;
+  const propsArray: string[] = paths.length ? [rawSelector, ...paths] : rawSelector.split('.');
+
+  return ɵivyEnabled
+    ? createSelectorFnIvy(propsArray, config)
+    : createSelectorFnViewEngine(propsArray);
 }
 
 /**
@@ -46,8 +50,36 @@ export function removeDollarAtTheEnd(name: string): string {
   return dollarAtTheEnd ? name.slice(0, lastCharIndex) : name;
 }
 
+export type SelectorFn =
+  | ((state: any, ...states: any[]) => any)
+  | string
+  | Type<any>
+  | StateToken<any>;
+
 export type PropertyType<T> = T extends StateToken<any>
   ? Observable<ExtractTokenType<T>>
   : T extends (...args: any[]) => any
   ? Observable<ReturnType<T>>
   : any;
+
+function createSelectObservableIvy<T = any>(
+  selector: any,
+  store: Store | null
+): Observable<T> {
+  if (ngDevMode && !store) throwSelectFactoryNotConnectedError();
+  return store!.select(selector);
+}
+
+function createSelectObservableViewEngine<T = any>(selector: any): Observable<T> {
+  if (!SelectFactory.store) throwSelectFactoryNotConnectedError();
+  return SelectFactory.store!.select(selector);
+}
+
+function createSelectorFnIvy(propsArray: string[], config: NgxsConfig | null) {
+  if (ngDevMode && !config) throwSelectFactoryNotConnectedError();
+  return propGetter(propsArray, config!);
+}
+
+function createSelectorFnViewEngine(propsArray: string[]) {
+  return propGetter(propsArray, SelectFactory.config!);
+}
