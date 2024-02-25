@@ -13,11 +13,11 @@ NGXS is modeled after the CQRS pattern popularly implemented in libraries like R
 
 ### 🌱 Does NGXS work with Ivy?
 
-Yes, it does, and very easily. Check out the [NGXS Ivy migration guide](https://ngxs.io/advanced/ivy-migration-guide) for details.
+Yes, it does, and very easily. Check out the [NGXS Ivy migration guide](recipes/ivy-migration-guide.md) for details.
 
 ### 👋 New to NGXS?
 
-If you're just getting started with NGXS, I recommend you head over to the [concepts](ngxs/intro.md) and then explore the rich ecosystem of examples in the [community resources](community/projects.md) page.
+If you're just getting started with NGXS, I recommend you head over to the [concepts](ngxs/intro.md) and then explore the rich ecosystem of examples in the [community resources](community-and-labs/community/projects.md) page.
 
 ### ❓ Need Help?
 
@@ -29,7 +29,7 @@ If you think there is a bug in this library, you can open an issue on GitHub ([h
 
 ### ❤️ Giving Back
 
-Become a [Contributor](community/contributors.md) or a [Sponsor](community/sponsors.md).
+Become a [Contributor](community-and-labs/community/contributors.md) or a [Sponsor](community-and-labs/community/sponsors.md).
 
 ## Sponsors
 

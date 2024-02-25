@@ -17,35 +17,35 @@ ng add @ngxs/store --plugins DEVTOOLS,FORM --project angular-ngxs-project
 ```
 
 | Option    | Description                                               | Default Value               |
-| :-------- | :-------------------------------------------------------- | :-------------------------- |
+| --------- | --------------------------------------------------------- | --------------------------- |
 | --project | Name of the project as it is defined in your angular.json | Workspace's default project |
 | --plugins | Comma separate the plugins as appear below                |                             |
 
 ### Plugins to optionally install using the schematics
 
-- Ngxs developer tools plugin
-- Ngxs form plugin
-- Ngxs HMR plugin
-- Ngxs logger plugin
-- Ngxs router plugin
-- Ngxs storage plugin
-- Ngxs websocket plugin
+* Ngxs developer tools plugin
+* Ngxs form plugin
+* Ngxs HMR plugin
+* Ngxs logger plugin
+* Ngxs router plugin
+* Ngxs storage plugin
+* Ngxs websocket plugin
 
 You can find more information about plugins on the [plugins page](https://www.ngxs.io/plugins).
 
 🪄 **This command will**:
 
-- Update `package.json` dependencies with `@ngxs/store`
-- Update `package.json` dependencies with the selected plugins
-- Install dependencies by executing `npm install`
+* Update `package.json` dependencies with `@ngxs/store`
+* Update `package.json` dependencies with the selected plugins
+* Install dependencies by executing `npm install`
 
 If your project is standalone one:
 
-- Update the `providers` array of your selected project with `provideStore([])`
+* Update the `providers` array of your selected project with `provideStore([])`
 
 If your application is module based:
 
-- Update the `imports` array of your `app.module.ts` with `NgxsModule.forRoot([])`
+* Update the `imports` array of your `app.module.ts` with `NgxsModule.forRoot([])`
 
 ## Manual Installation
 
@@ -76,16 +76,11 @@ import { ZooState } from './examples/zoo.state';
 export class AppModule {}
 ```
 
-When you include the module in the import, you can pass root stores along with [options](../advanced/options.md).
-If you are lazy loading, you can use the `forFeature` option with the same arguments.
+When you include the module in the import, you can pass root stores along with [options](../concepts/store/options.md). If you are lazy loading, you can use the `forFeature` option with the same arguments.
 
-Options such as `developmentMode` can be passed to the module as the second argument in the `forRoot` method.
-In development mode, plugin authors can add additional runtime checks/etc to enhance the developer experience. Switching
-to development mode will also freeze your store using [deep-freeze-strict](https://www.npmjs.com/package/deep-freeze-strict)
-module.
+Options such as `developmentMode` can be passed to the module as the second argument in the `forRoot` method. In development mode, plugin authors can add additional runtime checks/etc to enhance the developer experience. Switching to development mode will also freeze your store using [deep-freeze-strict](https://www.npmjs.com/package/deep-freeze-strict) module.
 
-It's important that you add `NgxsModule.forRoot([])` at the root of your module even if
-all of your states are feature states.
+It's important that you add `NgxsModule.forRoot([])` at the root of your module even if all of your states are feature states.
 
 ## Development Builds
 
@@ -107,8 +102,7 @@ yarn add @ngxs/devtools-plugin@dev
 yarn add @ngxs/{store,logger-plugin,devtools-plugin}@dev
 ```
 
-This will install the version currently tagged as `@dev`.
-Your package.json file will be locked to that specific version.
+This will install the version currently tagged as `@dev`. Your package.json file will be locked to that specific version.
 
 ```json
 {
